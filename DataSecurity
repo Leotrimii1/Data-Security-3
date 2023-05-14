@@ -43,6 +43,9 @@ public class Main {
                             File inputFile = fileChooser.getSelectedFile();
                             String outputFilePath = inputFile.getParent() + "/encrypted_" + inputFile.getName();
                             File outputFile = new File(outputFilePath);
+                            
+                            String shiftStr = JOptionPane.showInputDialog(caesarFrame, "Enter the shift value:");
+                            int shift = Integer.parseInt(shiftStr);
 
                             try {
                                 // Read the contents of the input file
@@ -57,7 +60,7 @@ public class Main {
                                 inputStream.close();
 
                                 // Encrypt the input text using the Caesar cipher algorithm
-                                int shift = 3;
+                                //int shift = 3;
                                 String inputText = inputTextBuilder.toString();
                                 String encryptedText = caesarEncrypt(inputText, shift);
 
