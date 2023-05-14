@@ -266,3 +266,96 @@ public class Main {
         // Show the main window
         mainFrame.setVisible(true);
     }
+    
+    public static String vigenereEncrypt(String text, String key) {
+        String result = "";
+        int keyIndex = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            char keyChar = Character.toUpperCase(key.charAt(keyIndex));
+            if (c >= 'A' && c <= 'Z') {
+                int shift = keyChar - 'A';
+                c = (char) ('A' + (c - 'A' + shift) % 26);
+                if (Character.isLowerCase(text.charAt(i))) {
+                    c = Character.toLowerCase(c);
+                }
+                keyIndex = (keyIndex + 1) % key.length();
+            } else if (c >= 'a' && c <= 'z') {
+                int shift = keyChar - 'A';
+                c = (char) ('a' + (c - 'a' + shift) % 26);
+                if (Character.isUpperCase(text.charAt(i))) {
+                    c = Character.toUpperCase(c);
+                }
+                keyIndex = (keyIndex + 1) % key.length();
+            }
+            result += c;
+        }
+        return result;
+    }
+
+
+    public static String vigenereDecrypt(String text, String key) {
+        String result = "";
+        int keyIndex = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (Character.isLetter(c)) {
+                boolean isUpperCase = Character.isUpperCase(c);
+                c = Character.toUpperCase(c);
+                int shift = key.charAt(keyIndex) - 'A';
+                c = (char) ('A' + (c - 'A' - shift + 26) % 26);
+                if (!isUpperCase) {
+                    c = Character.toLowerCase(c);
+                }
+                keyIndex = (keyIndex + 1) % key.length();
+            }
+            result += c;
+        }
+        return result;
+    }
+
+    public static String caesarEncrypt(String inputText, int shift) {
+        StringBuilder encryptedTextBuilder = new StringBuilder();
+
+        // Iterate over each character in the input text
+        for (int i = 0; i < inputText.length(); i++) {
+            char currentChar = inputText.charAt(i);
+
+            // Apply the shift to the current character and append it to the encrypted text
+            if (Character.isUpperCase(currentChar)) {
+                char shiftedChar = (char) ((currentChar + shift - 'A') % 26 + 'A');
+                encryptedTextBuilder.append(shiftedChar);
+            } else if (Character.isLowerCase(currentChar)) {
+                char shiftedChar = (char) ((currentChar + shift - 'a') % 26 + 'a');
+                encryptedTextBuilder.append(shiftedChar);
+            } else {
+                encryptedTextBuilder.append(currentChar);
+            }
+        }
+
+        return encryptedTextBuilder.toString();
+    }
+
+    public static String caesarDecrypt(String encryptedText, int shift) {
+        StringBuilder decryptedTextBuilder = new StringBuilder();
+
+        // Iterate over each character in the encrypted text
+        for (int i = 0; i < encryptedText.length(); i++) {
+            char currentChar = encryptedText.charAt(i);
+
+            // Apply the reverse shift to the current character and append it to the decrypted text
+            if (Character.isUpperCase(currentChar)) {
+                char shiftedChar = (char) ((currentChar - shift - 'A' + 26) % 26 + 'A');
+                decryptedTextBuilder.append(shiftedChar);
+            } else if (Character.isLowerCase(currentChar)) {
+                char shiftedChar = (char) ((currentChar - shift - 'a' + 26) % 26 + 'a');
+                decryptedTextBuilder.append(shiftedChar);
+            } else {
+                decryptedTextBuilder.append(currentChar);
+            }
+        }
+
+        return decryptedTextBuilder.toString();
+    }
+
+}
