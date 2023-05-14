@@ -139,3 +139,128 @@ public class Main {
                 caesarFrame.setVisible(true);
             }
         });
+ // Create the Vigenere button
+        JButton vigenereButton = new JButton("Vigenere");
+        vigenereButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Create the Caesar window
+                JFrame vigenereFrame = new JFrame("Vigenere Cipher");
+                vigenereFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only the Caesar window
+                vigenereFrame.setSize(300, 200);
+                vigenereFrame.setLocationRelativeTo(null); // Center the window on the screen
+
+                // Create the Encrypt and Decrypt buttons
+                JButton encryptButton = new JButton("Encrypt");
+                JButton decryptButton = new JButton("Decrypt");
+
+                // Add the buttons to the Caesar window
+                JPanel vigenerePanel = new JPanel();
+                vigenerePanel.add(encryptButton);
+                vigenerePanel.add(decryptButton);
+                vigenereFrame.add(vigenerePanel);
+
+                // Show the Caesar window
+                vigenereFrame.setVisible(true);
+
+                // Add action listener to the Encrypt button
+                encryptButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        // Create a file chooser dialog to select the file to encrypt
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                        fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
+                        int result = fileChooser.showOpenDialog(vigenereFrame);
+
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            // Get the selected file and create a new file to write the encrypted text to
+                            File inputFile = fileChooser.getSelectedFile();
+                            String outputFilePath = inputFile.getParent() + "/encrypted_" + inputFile.getName();
+                            File outputFile = new File(outputFilePath);
+
+                            try {
+                                // Read the contents of the input file
+                                FileInputStream inputStream = new FileInputStream(inputFile);
+                                Scanner scanner = new Scanner(inputStream);
+                                StringBuilder inputTextBuilder = new StringBuilder();
+                                while (scanner.hasNextLine()) {
+                                    inputTextBuilder.append(scanner.nextLine());
+                                    inputTextBuilder.append("\n");
+                                }
+                                scanner.close();
+                                inputStream.close();
+
+                                // Encrypt the input text using the Vigenere cipher
+                                String inputText = inputTextBuilder.toString().trim();
+                                String key = "MYSECRETKEY"; // Replace with your own key
+                                String encryptedText = vigenereEncrypt(inputText, key);
+
+                                // Write the encrypted text to the output file
+                                FileOutputStream outputStream = new FileOutputStream(outputFile);
+                                outputStream.write(encryptedText.getBytes());
+                                outputStream.close();
+
+                                JOptionPane.showMessageDialog(vigenereFrame, "File encrypted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(vigenereFrame, "Error encrypting file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    }
+                });
+
+                decryptButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        // Create a file chooser dialog to select the file to decrypt
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                        fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
+                        int result = fileChooser.showOpenDialog(vigenereFrame);
+
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            // Get the selected file and create a new file to write the decrypted text to
+                            File inputFile = fileChooser.getSelectedFile();
+                            String outputFilePath = inputFile.getParent() + "/decrypted_" + inputFile.getName();
+                            File outputFile = new File(outputFilePath);
+
+                            try {
+                                // Read the contents of the input file
+                                FileInputStream inputStream = new FileInputStream(inputFile);
+                                Scanner scanner = new Scanner(inputStream);
+                                StringBuilder inputTextBuilder = new StringBuilder();
+                                while (scanner.hasNextLine()) {
+                                    inputTextBuilder.append(scanner.nextLine());
+                                    inputTextBuilder.append("\n");
+                                }
+                                scanner.close();
+                                inputStream.close();
+
+                                // Decrypt the input text using the Vigenere cipher
+                                String inputText = inputTextBuilder.toString().trim();
+                                String key = "MYSECRETKEY"; // Replace with your own key
+                                String decryptedText = vigenereDecrypt(inputText, key);
+
+                                // Write the decrypted text to the output file
+                                FileOutputStream outputStream = new FileOutputStream(outputFile);
+                                outputStream.write(decryptedText.getBytes());
+                                outputStream.close();
+
+                                JOptionPane.showMessageDialog(vigenereFrame, "File decrypted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(vigenereFrame, "Error decrypting file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    }
+                });
+
+            }
+        });
+
+
+        // Add the buttons to the main window
+        JPanel mainPanel = new JPanel();
+        mainPanel.add(caesarButton);
+        mainPanel.add(vigenereButton);
+        mainFrame.add(mainPanel);
+
+        // Show the main window
+        mainFrame.setVisible(true);
+    }
