@@ -73,3 +73,69 @@ public class Main {
                         }
                     }
                 });
+                 // ActionListener for the Decrypt button
+                decryptButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        // Create a file chooser dialog to select the file to decrypt
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                        fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
+                        int result = fileChooser.showOpenDialog(caesarFrame);
+
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            // Ask the user for the shift value
+                            String shiftInput = JOptionPane.showInputDialog(caesarFrame, "Enter the shift value:", "Shift", JOptionPane.PLAIN_MESSAGE);
+
+                            // Try to parse the shift value as an integer
+                            int shift;
+                            try {
+                                shift = Integer.parseInt(shiftInput);
+                            } catch (NumberFormatException ex) {
+                                JOptionPane.showMessageDialog(caesarFrame, "Invalid shift value: " + shiftInput, "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+
+                            // Get the selected file and create a new file to write the decrypted text to
+                            File inputFile = fileChooser.getSelectedFile();
+                            String outputFilePath = inputFile.getParent() + "/decrypted_" + inputFile.getName();
+                            File outputFile = new File(outputFilePath);
+
+                            try {
+                                // Read the contents of the input file
+                                FileInputStream inputStream = new FileInputStream(inputFile);
+                                Scanner scanner = new Scanner(inputStream);
+                                StringBuilder inputTextBuilder = new StringBuilder();
+                                while (scanner.hasNextLine()) {
+                                    inputTextBuilder.append(scanner.nextLine());
+                                    inputTextBuilder.append("\n");
+                                }
+                                scanner.close();
+                                inputStream.close();
+
+                                // Decrypt the input text using the Caesar cipher algorithm
+                                String encryptedText = inputTextBuilder.toString();
+                                String decryptedText = caesarDecrypt(encryptedText, shift);
+
+                                // Write the decrypted text to the output file
+                                FileOutputStream outputStream = new FileOutputStream(outputFile);
+                                outputStream.write(decryptedText.getBytes());
+                                outputStream.close();
+
+                                JOptionPane.showMessageDialog(caesarFrame, "File decrypted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(caesarFrame, "Error decrypting file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    }
+                });
+
+                // Add the buttons to the Caesar window
+                JPanel caesarPanel = new JPanel();
+                caesarPanel.add(encryptButton);
+                caesarPanel.add(decryptButton);
+                caesarFrame.add(caesarPanel);
+
+                // Show the Caesar window
+                caesarFrame.setVisible(true);
+            }
+        });
