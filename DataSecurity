@@ -191,7 +191,8 @@ public class Main {
 
                                 // Encrypt the input text using the Vigenere cipher
                                 String inputText = inputTextBuilder.toString().trim();
-                                String key = "MYSECRETKEY"; // Replace with your own key
+                                String key = JOptionPane.showInputDialog(vigenereFrame, "Enter the encryption key:");
+                                key = key.toUpperCase();
                                 String encryptedText = vigenereEncrypt(inputText, key);
 
                                 // Write the encrypted text to the output file
@@ -235,7 +236,8 @@ public class Main {
 
                                 // Decrypt the input text using the Vigenere cipher
                                 String inputText = inputTextBuilder.toString().trim();
-                                String key = "MYSECRETKEY"; // Replace with your own key
+                                String key = JOptionPane.showInputDialog(vigenereFrame, "Enter the encryption key:");
+                                key = key.toUpperCase();
                                 String decryptedText = vigenereDecrypt(inputText, key);
 
                                 // Write the decrypted text to the output file
